@@ -9,3 +9,7 @@ const port = 3000;
 app.get("/", (req, res) => {
   response.send("To see the job listing visit /api/jobs");
 });
+
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
+});
