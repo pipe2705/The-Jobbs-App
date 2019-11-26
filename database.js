@@ -8,6 +8,9 @@ const createTableJobSeekerQuery =
 const createTableJobsQuery =
   "CREATE TABLE IF NOT EXISTS Jobs (position TEXT, company TEXT, salary INTEGER, city_location TEXT, country_location TEXT, profession_id INTEGER, date_posted INTEGER) ";
 
+const createTableJobsAppliedQuery =
+  "CREATE TABLE IF NOT EXISTS Jobs_Applied (applicant_id INTEGER, job_id INTEGER)";
+
 database.run(createTableJobSeekerQuery, error => {
   if (error) console.log(new Error("Create Job Seeker table failed"), error);
   else console.log("Create new Job Seeker table succeeded!");
@@ -16,6 +19,12 @@ database.run(createTableJobSeekerQuery, error => {
 database.run(createTableJobsQuery, error => {
   if (error) console.log(new Error("Create Jobs table failed"), error);
   else console.log("Create new Jobs table succeeded!");
+});
+
+database.run(createTableJobsAppliedQuery, error => {
+  if (error)
+    console.log(new Error("Create Jobs Applied To Table failed"), error);
+  else console.log("Create Jobs Applied To succeeded!");
 });
 
 module.exports = database;
