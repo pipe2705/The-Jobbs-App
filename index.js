@@ -73,7 +73,43 @@ app.post("/api/JobSeeker", (req, res) => {
 });
 
 //update a job seeker info
+
+app.put("/api/JobSeeker/:id", (req, res) => {
+  let jobSeekerId = parseInt(req.params.id);
+  let queryHelper = Object.keys(req.body).map(
+    ele => `${ele.toUpperCase()} = ?`
+  );
+  let updateOneJobSeeker = `UPDATE JobSeeker SET ${queryHelper.join(
+    ", "
+  )} WHERE JobSeeker.oid = ?`;
+  let queryValues = [...Object.values(req.body), jobSeekerId];
+
+  database.run(updateOneJobSeeker, queryValues, function(error) {
+    if (error) {
+      console.log(new Error("Could not update Job Seeker"), error);
+      res.sendStatus(500);
+    } else {
+      console.log(`Job Seeker with ID ${jobSeekerId} was updated successfully`);
+      res.sendStatus(200);
+    }
+  });
+});
 //delete job seeker
+
+app.delete("/api/JobSeeker/:id", (req, res) => {
+  let deleteById = `DELETE FROM JobSeeker WHERE JobSeeker.oid = ?`;
+  let jobSeekerId = req.params.id;
+
+  database.run(deleteById, jobSeekerId, error => {
+    if (error) {
+      res.sendStatus(500);
+      console.log("Could not delete Job Seeker", error);
+    } else {
+      console.log("Job seeker Deleted ");
+      res.sendStatus(200);
+    }
+  });
+});
 
 /*********************************
  *
