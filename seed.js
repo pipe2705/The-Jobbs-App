@@ -32,12 +32,30 @@ const jobsList = [
   }
 ];
 
+const professionList = [
+  {
+    title: "Product Manager",
+    industry: "Technology"
+  },
+  {
+    title: "Product Manager",
+    industry: "Hardware"
+  },
+  {
+    title: "Software Engineer",
+    industry: "Technology"
+  }
+];
+
 const deleteJobSeeker = "DELETE FROM JobSeeker";
 const deleteJobs = "DELETE FROM Jobs";
+const deleteProfession = "DELETE FROM Profession";
 const insertIntoJobSeeker =
   " INSERT INTO JobSeeker (name, city_location, profession_id, age, years_of_experience, country_location) VALUES (?, ?, ?, ?, ?, ?)";
 const insertIntoJobs =
   "INSERT INTO Jobs (position, company, salary, city_location, country_location, profession_id, date_posted) VALUES (?, ?, ?, ?, ?, ?, ?)";
+const insertIntoProfession =
+  "INSERT INTO Profession (title, industry) VALUES (?, ?)";
 
 db.run(deleteJobSeeker, error => {
   if (error) console.log(new Error("Could not delete Job Seeker"), error);
@@ -86,6 +104,30 @@ db.run(deleteJobSeeker, error => {
               }
             }
           );
+        });
+        db.run(deleteProfession, error => {
+          if (error)
+            console.log(new Error("Could not delete Profession"), error);
+          else {
+            professionList.forEach(prof => {
+              db.run(
+                insertIntoProfession,
+                [prof.title, prof.industry],
+                error => {
+                  if (error)
+                    console.log(
+                      new Error("Could not add profession value"),
+                      error
+                    );
+                  else {
+                    console.log(
+                      `${prof.title} successfully added to the database`
+                    );
+                  }
+                }
+              );
+            });
+          }
         });
       }
     });
