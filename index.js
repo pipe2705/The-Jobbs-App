@@ -94,6 +94,7 @@ app.put("/api/JobSeeker/:id", (req, res) => {
     }
   });
 });
+
 //delete job seeker
 
 app.delete("/api/JobSeeker/:id", (req, res) => {
@@ -112,7 +113,6 @@ app.delete("/api/JobSeeker/:id", (req, res) => {
 });
 
 /*********************************
- *
  *
  * TODO: JOBS ROUTES
  *
@@ -144,29 +144,65 @@ app.get("/api/Jobs/:id", (req, res) => {
   });
 });
 //create new job
-app.post("/api/Jobs"),
-  (req, res) => {
-    let createNewJob = [
-      req.body.position,
-      req.body.company,
-      req.body.salary,
-      req.body.city_location,
-      req.body.country_location,
-      req.body.profession_id,
-      req.body.date_posted
-    ];
-    let insertNewJob = "INSERT INTO Jobs VALUES (?, ?, ?, ?, ?, ?, ?)";
-    database.all(insertNewJob, createNewJob, (error, rows) => {
-      if (error) {
-        console.log("Could not add a Job to the Jobs Table", error);
-        res.sendStatus(500);
-      } else {
-        res.status(200).json(rows);
-      }
-    });
-  };
+app.post("/api/Jobs", (req, res) => {
+  let createNewJob = [
+    req.body.position,
+    req.body.company,
+    req.body.salary,
+    req.body.city_location,
+    req.body.country_location,
+    req.body.profession_id,
+    req.body.date_posted
+  ];
+  let insertNewJob = "INSERT INTO Jobs VALUES (?, ?, ?, ?, ?, ?, ?)";
+  database.all(insertNewJob, createNewJob, (error, rows) => {
+    if (error) {
+      console.log("Could not add a Job to the Jobs Table", error);
+      res.sendStatus(500);
+    } else {
+      res.status(200).json(rows);
+    }
+  });
+});
+
 //update a job info
+app.put("/api/Jobs/:id", (req, res) => {
+  let jobId = parseInt(req.params.id);
+  let queryHelper = Object.keys(req.body).map(
+    ele => `${ele.toUpperCase()} = ?`
+  );
+  let updateOneJob = `UPDATE Jobs SET ${queryHelper.join(
+    ", "
+  )} WHERE Jobs.oid = ?`;
+  let queryValues = [...Object.values(req.body), jobId];
+
+  database.run(updateOneJob, queryValues, function(error) {
+    if (error) {
+      console.log(new Error("Could not update Job Lising Information"), error);
+      res.sendStatus(500);
+    } else {
+      console.log(`Job with ID ${jobId} was updated successfully`);
+      res.sendStatus(200);
+    }
+  });
+});
+
 //delete job
+
+app.delete("/api/Jobs/:id", (req, res) => {
+  let deleteByJobId = `DELETE FROM Jobs WHERE Jobs.oid = ?`;
+  let jobId = req.param.id;
+
+  database.run(deleteByJobId, jobId, error => {
+    if (error) {
+      res.sendStatus(500);
+      console.log("Could not delete Job listing", error);
+    } else {
+      console.log("Job Listing Deleted");
+      res.sendStatus(200);
+    }
+  });
+});
 
 /*********************************
  *
