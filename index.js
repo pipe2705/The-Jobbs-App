@@ -119,8 +119,52 @@ app.delete("/api/JobSeeker/:id", (req, res) => {
  */
 
 // get all Jobs
+app.get("/api/Jobs", (req, res) => {
+  let getAllJobs = "SELECT * FROM Jobs";
+  database.all(getAllJobs, (error, results) => {
+    if (error) {
+      console.log("Get all Jobs table failed", error);
+      res.sendStatus(500);
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
 //get one Job
+
+app.get("/api/Jobs/:id", (req, res) => {
+  let jobId = req.params.id;
+  let getOneJob = `SELECT * FROM Jobs WHERE jobs.oid = ${jobId}`;
+  database.all(getOneJob, (error, result) => {
+    if (error) console.log("could not retrieve Job Listing", error);
+    else {
+      res.status(200).json(result);
+    }
+  });
+});
 //create new job
+app.post("/api/Jobs"),
+  (req, res) => {
+    let createNewJob = [
+      req.body.position,
+      req.body.company,
+      req.body.salary,
+      req.body.city_location,
+      req.body.country_location,
+      req.body.profession_id,
+      req.body.date_posted
+    ];
+    let insertNewJob = "INSERT INTO Jobs VALUES (?, ?, ?, ?, ?, ?, ?)";
+    database.all(insertNewJob, createNewJob, (error, rows) => {
+      if (error) {
+        console.log("Could not add a Job to the Jobs Table", error);
+        res.sendStatus(500);
+      } else {
+        res.status(200).json(rows);
+      }
+    });
+  };
 //update a job info
 //delete job
 
