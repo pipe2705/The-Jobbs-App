@@ -212,11 +212,87 @@ app.delete("/api/Jobs/:id", (req, res) => {
  */
 
 // get all professions
-//get one profession
-//create new profession
-//update a profession info
-//delete profession
 
+app.get("/api/Profession", (req, res) => {
+  let getAllProfessions = "SELECT * FROM Profession";
+  database.all(getAllProfessions, (error, results) => {
+    if (error) {
+      console.log("Get all Professions Table failed", error);
+      res.sendStatus(500);
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+//get one profession
+
+app.get("/api/Profession/:id", (req, res) => {
+  let professionId = req.params.id;
+  let getOneProfession = `SELECT * FROM Profession where Profession.oid = ${professionId}`;
+  database.all(getOneProfession, (error, results) => {
+    if (error) {
+      console.log("Could not retrieve Profession", error);
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+//create new profession
+
+app.post("/api/Profession", (req, res) => {
+  let createNewProfession = [req.body.title, req.body.industry];
+  let insertNewProfession = "INSERT INTO Profession VALUES (?, ?)";
+  database.all(insertNewProfession, createNewProfession, (error, rows) => {
+    if (error) {
+      console.log(
+        "Could not add a Professions to the Professions Table",
+        error
+      );
+    } else {
+      res.status(200).json(rows);
+    }
+  });
+});
+//update a profession info\
+app.put("/api/Profession/:id", (req, res) => {
+  let professionId = parseInt(req.params.id);
+  let queryHelper = Object.keys(req.body).map(
+    ele => `${ele.toUpperCase()} = ?`
+  );
+  let updateOneProfession = `UPDATE Profession SET ${queryHelper.join(
+    ", "
+  )} WHERE Profession.oid = ?`;
+
+  let queryValues = [...Object.values(req.body), professionId];
+  database.run(updateOneProfession, queryValues, function(error) {
+    if (error) {
+      console.log(
+        new Error("Could not update the Profession Information"),
+        error
+      );
+      res.sendStatus(500);
+    } else {
+      console.log(
+        `Profession with ID ${professionId} was updated successfully`
+      );
+      res.sendStatus(200);
+    }
+  });
+});
+//delete profession
+app.delete("/api/Profession/:id", (req, res) => {
+  let deleteProfessionById = `DELETE FROM Profession WHERE Profession.oid = ?`;
+  let professionId = req.params.id;
+
+  database.run(deleteProfessionById, professionId, error => {
+    if (error) {
+      console.log("Could not delete Profession", error);
+    } else {
+      console.log("Profession Deleted");
+      res.sendStatus(200);
+    }
+  });
+});
 /*********************************
  *
  *
