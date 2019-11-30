@@ -15,10 +15,6 @@ app.get("/", (req, res) => {
 //
 // TODO:  ROUTES
 
-app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
-});
-
 /*********************************
  *
  *
@@ -299,3 +295,57 @@ app.delete("/api/Profession/:id", (req, res) => {
  * TODO: JOIN TABLE ROUTES MANY TO MANY
  *
  */
+// Get Job seeker applied to jobs usuing the applicants ID
+app.get("api/JobSeeker/:id/Jobs", (req, res) => {
+  let applicantId = req.params.id;
+  let queryString = " SELECT * FROM Jobs_Applied WHERE applicant_id = ?";
+
+  database.all(queryString, [applicantId], (error, results) => {
+    if (error) {
+      console.log(error);
+      res.sendStatus(500);
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+// Create an association between a JobSeeker and a Job on Jobs_Applied Table
+
+app.post("/api/JobSeeker/:id/Jobs", (req, res) => {
+  let applicantId = req.params.id;
+  let jobId = req.body.job_id;
+  let insertString = "INSERT INTO Jobs_Applied VALUES (?, ?)";
+
+  database.run(insertString, [applicantId, jobId], (error, rows) => {
+    if (error) {
+      console.log(error);
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200).json(rows);
+    }
+  });
+});
+
+//
+
+app.get("/api/Jobs_Applied/JobSeeker/:id", (req, res) => {
+  let jobSeekerId = req.params.id;
+  let queryString = `SELECT applicant_id, job_id FROM Jobs_Applied
+JOIN JobSeeker ON JobSeeker.oid = Jobs_Applied.applicant_id
+JOIN Jobs ON Jobs.oid = Jobs_Applied.job_id
+WHERE JobSeeker.oid = ?`;
+
+  database.all(queryString, [jobSeekerId], (error, results) => {
+    if (error) {
+      console.log(error);
+      res.sendStatus(500);
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
+});
