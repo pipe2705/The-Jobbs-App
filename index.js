@@ -327,7 +327,7 @@ app.post("/api/JobSeeker/:id/Jobs", (req, res) => {
   });
 });
 
-//
+//get a list of Jobs Applied to by Job Seeker ID
 
 app.get("/api/Jobs_Applied/JobSeeker/:id", (req, res) => {
   let jobSeekerId = req.params.id;
@@ -339,6 +339,28 @@ WHERE JobSeeker.oid = ?`;
   database.all(queryString, [jobSeekerId], (error, results) => {
     if (error) {
       console.log(error);
+      res.sendStatus(500);
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+// get a list of Job Seekers who Applied to a Job using the Job Id
+
+app.get("/api/Jobs_Applied/Jobs/:id", (req, res) => {
+  let jobId = req.params.id;
+  let queryString = `SELECT job_id, applicant_id FROM Jobs_Applied
+    JOIN Jobs ON Jobs.oid = Jobs_Applied.job_id
+    JOIN JobSeeker ON JobSeeker.oid = Jobs_Applied.applicant_id
+    WHERE Jobs.oid = ?`;
+
+  database.all(queryString, [jobId], (error, results) => {
+    if (error) {
+      console.log(
+        "could not retrieve list of job seekers per job applied to",
+        error
+      );
       res.sendStatus(500);
     } else {
       res.status(200).json(results);
