@@ -6,7 +6,7 @@ const createTableJobSeekerQuery =
   "CREATE TABLE IF NOT EXISTS JobSeeker (name TEXT, city_location TEXT, profession_id INTEGER, age INTEGER, years_of_experience INTEGER, country_location TEXT)";
 
 const createTableJobsQuery =
-  "CREATE TABLE IF NOT EXISTS Jobs (position TEXT, company TEXT, salary INTEGER, city_location TEXT, country_location TEXT, profession_id INTEGER, date_posted INTEGER) ";
+  "CREATE TABLE IF NOT EXISTS Jobs (position TEXT, company TEXT, salary INTEGER, city_location TEXT, country_location TEXT, profession_id INTEGER, week_posted INTEGER, is_fulltime INTEGER) ";
 
 const createTableProfessionQuery =
   "CREATE TABLE IF NOT EXISTS Profession (title TEXT, industry TEXT)";

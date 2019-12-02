@@ -148,9 +148,10 @@ app.post("/api/Jobs", (req, res) => {
     req.body.city_location,
     req.body.country_location,
     req.body.profession_id,
-    req.body.date_posted
+    req.body.week_posted,
+    req.body.is_fulltime
   ];
-  let insertNewJob = "INSERT INTO Jobs VALUES (?, ?, ?, ?, ?, ?, ?)";
+  let insertNewJob = "INSERT INTO Jobs VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
   database.all(insertNewJob, createNewJob, (error, rows) => {
     if (error) {
       console.log("Could not add a Job to the Jobs Table", error);
