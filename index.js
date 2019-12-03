@@ -11,10 +11,6 @@ app.get("/", (req, res) => {
   response.send("To see the job listing visit /api/jobs");
 });
 
-//
-//
-// TODO:  ROUTES
-
 /*********************************
  *
  *
@@ -46,6 +42,7 @@ app.get("/api/JobSeeker/:id", (req, res) => {
     }
   });
 });
+
 //create new job seeker
 
 app.post("/api/JobSeeker", (req, res) => {
@@ -108,7 +105,7 @@ app.delete("/api/JobSeeker/:id", (req, res) => {
   });
 });
 
-/*********************************
+/*******************************************************************************
  *
  * TODO: JOBS ROUTES
  *
@@ -201,7 +198,7 @@ app.delete("/api/Jobs/:id", (req, res) => {
   });
 });
 
-/*********************************
+/*************************************************************************************8
  *
  *
  * TODO: PROFESSION ROUTES
@@ -290,7 +287,7 @@ app.delete("/api/Profession/:id", (req, res) => {
     }
   });
 });
-/*********************************
+/**********************************************************************************************
  *
  *
  * TODO: JOIN TABLE ROUTES MANY TO MANY
