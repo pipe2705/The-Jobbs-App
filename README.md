@@ -70,8 +70,7 @@ Once verified we can also view the information of one JobSeeker using the id #. 
 `localhost:3000/api/JobSeeker/1`
  
 ```
-[
-    {
+{
         "name": "Felipe Gonzalez",
         "city_location": "San Francisco",
         "profession_id": 1,
@@ -79,7 +78,6 @@ Once verified we can also view the information of one JobSeeker using the id #. 
         "years_of_experience": 6,
         "country_location": "USA"
     }
- ]
 ```
 
 We can also update the information on a Job Seeker using a PUT request using the id of the JobSeeker. The path is the following and depending on the edits made in the JSON object you will be able to see the changes using a GET request for that specific JobSeeker using it's ID. 
