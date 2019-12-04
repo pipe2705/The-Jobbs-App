@@ -154,6 +154,12 @@ const insertIntoJobs =
 const insertIntoProfession =
   "INSERT INTO Profession (title, industry) VALUES (?, ?)";
 
+//
+//
+//
+//
+//
+
 db.run(deleteJobSeeker, error => {
   if (error) console.log(new Error("Could not delete Job Seeker"), error);
   else {
